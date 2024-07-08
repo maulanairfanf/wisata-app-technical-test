@@ -13,11 +13,16 @@ export const useAuthStore = defineStore('auth', {
 		async login(credentials) {
 			try {
 				const response = await axios.post('/login', credentials)
-				this.token = response.data.token
-				Cookies.set('token', this.token, { expires: 7 }) // Token akan disimpan di cookie selama 7 hari
-				axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
+				if (response) {
+					this.token = response.data.token
+					Cookies.set('token', this.token, { expires: 7 })
+					axios.defaults.headers.common[
+						'Authorization'
+					] = `Bearer ${this.token}`
+					return response
+				}
 			} catch (error) {
-				console.error(error)
+				throw error
 			}
 		},
 		async logout() {

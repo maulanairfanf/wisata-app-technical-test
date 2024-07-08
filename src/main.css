@@ -1,36 +1,15 @@
-:root {
-	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
-
-	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
-
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-a {
-	font-weight: 500;
-	color: #646cff;
-	text-decoration: inherit;
-}
-a:hover {
-	color: #535bf2;
-}
-
-body {
-	margin: 0;
-	display: flex;
-	place-items: center;
-	min-width: 320px;
-	min-height: 100vh;
-}
-
-/* src/main.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	.field-text {
+		@apply outline-none w-full px-4 py-2 rounded-lg border hover:border hover:border-white  border-gray-500 hover:shadow-md;
+	}
+	.btn {
+		@apply px-4 py-2 border bg-white outline-none rounded-lg font-semibold hover:border hover:border-white border-gray-500;
+	}
+	.alert-danger {
+		@apply absolute block top-5 right-5 p-4 mb-4 text-base leading-5 text-white bg-red-500 rounded-lg opacity-100;
+	}
+}

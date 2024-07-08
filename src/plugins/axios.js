@@ -21,9 +21,9 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
 	response => response,
 	error => {
-		if (error.response.status === 401) {
-			window.location = '/signin'
-		}
+		// if (error.response.status === 401) {
+		// 	window.location = '/signin'
+		// }
 		return Promise.reject(error)
 	}
 )
