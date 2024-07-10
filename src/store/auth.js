@@ -14,7 +14,8 @@ export const useAuthStore = defineStore('auth', {
 			try {
 				const response = await axios.post('/login', credentials)
 				if (response) {
-					this.token = response.data.token
+					console.log('response', response.data.data.access_token)
+					this.token = response.data.data.access_token
 					Cookies.set('token', this.token, { expires: 7 })
 					axios.defaults.headers.common[
 						'Authorization'
@@ -34,17 +35,10 @@ export const useAuthStore = defineStore('auth', {
 					Cookies.remove('token')
 					delete axios.defaults.headers.common['Authorization']
 				}
-			} catch (error) {}
-		},
-		async fetchUser() {
-			// if (this.token) {
-			// 	try {
-			// 		const response = await axios.get('/user')
-			// 		this.user = response.data
-			// 	} catch (error) {
-			// 		console.error(error)
-			// 	}
-			// }
+				return response
+			} catch (error) {
+				throw error
+			}
 		},
 	},
 })
