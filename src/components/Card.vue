@@ -3,7 +3,7 @@
 		class="bg-white border border-blue-500 rounded-md p-2 flex flex-col justify-between"
 	>
 		<h1 class="text-md">{{ item.name }}</h1>
-		<div class="flex justify-between mt-2">
+		<div class="flex justify-between mt-2" v-if="!suggestion">
 			<span :class="`badge capitalize text-md ${getColorBadge}`">{{
 				item.priority.name
 			}}</span>
@@ -12,17 +12,31 @@
 				Done
 			</button>
 		</div>
+		<div class="flex justify-end mt-2" v-else="!suggestion">
+			<button type="button" class="btn-primary">
+				<PlusCircleIcon class="-ml-0.5 h-5 w-5" aria-hidden="true" />
+				Add To Tasks
+			</button>
+		</div>
 	</div>
 </template>
 <script setup>
 import { computed } from 'vue'
 
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/20/solid'
+import {
+	CheckCircleIcon,
+	XCircleIcon,
+	PlusCircleIcon,
+} from '@heroicons/vue/20/solid'
 
 const props = defineProps({
 	item: {
 		type: Object,
 		required: true,
+	},
+	suggestion: {
+		type: Boolean,
+		default: false,
 	},
 })
 
