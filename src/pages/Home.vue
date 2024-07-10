@@ -35,9 +35,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- <div v-else-if="tasksStore.isLoading" class="h-full fixed w-full">
-		<div class="flex items-center justify-center w-full h-full"></div>
-	</div> -->
 </template>
 
 <script setup>
