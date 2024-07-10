@@ -1,13 +1,19 @@
 <template>
-	<div
-		class="flex flex-col items-center justify-center container mx-auto"
-		v-if="!tasksStore.isLoading && tasksStore.tasks.length > 0"
-	>
+	<div class="flex flex-col items-center justify-center container mx-auto">
 		<div class="grid md:grid-cols-12 gap-4 w-full">
 			<div class="md:col-span-10 flex flex-col items-center">
-				<TabGroup>
+				<TabGroup @change="handleChangeTab">
 					<Tab :dataTabList="dataTabList" />
-					<TabPanels class="w-full">
+					<div
+						v-if="tasksStore.isLoading"
+						class="h-full w-full flex items-center justify-center"
+					>
+						<Spinner size="h-24 w-24" class="mt-20" />
+					</div>
+					<TabPanels class="w-full" v-else>
+						<TabPanel class="tab-panel">
+							<TasksList :tasks="tasksStore.tasks" />
+						</TabPanel>
 						<TabPanel class="tab-panel">
 							<TasksList :tasks="tasksStore.tasks" />
 						</TabPanel>
@@ -17,12 +23,21 @@
 					</TabPanels>
 				</TabGroup>
 			</div>
-			<div class="md:col-span-2">
+			<div class="md:col-span-2 p-2">
 				<h1 class="text-xl text-white font-semibold py-4">Suggestion Tasks</h1>
-				<TasksListSuggestion :tasks="tasksStore.tasksSuggestion" />
+				<div
+					v-if="isLoadingSuggestion"
+					class="h-full w-full flex items-center justify-center"
+				>
+					<Spinner size="h-24 w-24" class="mt-20" />
+				</div>
+				<TasksListSuggestion v-else :tasks="tasksStore.tasksSuggestion" />
 			</div>
 		</div>
 	</div>
+	<!-- <div v-else-if="tasksStore.isLoading" class="h-full fixed w-full">
+		<div class="flex items-center justify-center w-full h-full"></div>
+	</div> -->
 </template>
 
 <script setup>
@@ -30,6 +45,7 @@ import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import { useTasksStore } from '../store/tasks'
 import TasksList from '../components/TasksList.vue'
 import TasksListSuggestion from '../components/TasksListSuggestion.vue'
+import Spinner from '../components/Spinner.vue'
 
 import Tab from '../components/Tab.vue'
 import { TabGroup, TabList, TabPanels, TabPanel } from '@headlessui/vue'
@@ -37,19 +53,44 @@ import { TabGroup, TabList, TabPanels, TabPanel } from '@headlessui/vue'
 const tasksStore = useTasksStore()
 const dataTabList = ref([
 	{
-		name: 'Tasks',
+		name: 'All Tasks',
 	},
 	{
-		name: 'Completed',
+		name: 'Incomplete Tasks',
+	},
+	{
+		name: 'Completed Tasks',
 	},
 ])
+const isLoadingSuggestion = ref(false)
+
+async function handleChangeTab(payload) {
+	if (payload === 0) {
+		tasksStore.is_completed = ''
+	} else if (payload === 1) {
+		tasksStore.is_completed = 1
+	} else if (payload === 2) {
+		tasksStore.is_completed = 0
+	}
+}
+
+watch(
+	() => tasksStore.is_completed,
+	async (oldValue, newValue) => {
+		if (oldValue !== newValue) {
+			await tasksStore.fetchTasks()
+		}
+	}
+)
 
 onBeforeMount(() => {
 	tasksStore.isLoading = true
+	isLoadingSuggestion.value = true
 })
+
 onMounted(async () => {
 	await tasksStore.fetchTasks()
 	await tasksStore.fetchTasksSuggestion()
-	tasksStore.isLoading = false
+	isLoadingSuggestion.value = false
 })
 </script>

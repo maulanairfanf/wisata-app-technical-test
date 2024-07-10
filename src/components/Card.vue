@@ -1,7 +1,5 @@
 <template>
-	<div
-		class="bg-white border border-blue-500 rounded-md p-2 flex flex-col justify-between"
-	>
+	<div class="bg-white border rounded-md p-2 flex flex-col justify-between">
 		<h1 class="text-md">{{ item.name }}</h1>
 		<div class="flex justify-between mt-2" v-if="!suggestion">
 			<span :class="`badge capitalize text-md ${getColorBadge}`">{{

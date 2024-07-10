@@ -5,7 +5,7 @@
 				v-for="(item, index) in tasks"
 				:key="index"
 				:item="item"
-				suggestion="true"
+				:suggestion="true"
 			/>
 		</div>
 	</div>
