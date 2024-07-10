@@ -1,33 +1,58 @@
-<!-- src/pages/Home.vue -->
-
 <template>
-	<div>
-		<h1>Home Page</h1>
-		<p>Welcome, {{ user?.email }}</p>
-		<button @click="logout" class="btn">Logout</button>
+	<div
+		class="flex flex-col items-center justify-center container mx-auto"
+		v-if="!tasksStore.isLoading && tasksStore.tasks.length > 0"
+	>
+		<div class="grid md:grid-cols-12 gap-4 w-full">
+			<div class="md:col-span-10 flex flex-col items-center">
+				<TabGroup>
+					<Tab :dataTabList="dataTabList" />
+					<TabPanels class="w-full">
+						<TabPanel class="tab-panel">
+							<TasksList :tasks="tasksStore.tasks" />
+						</TabPanel>
+						<TabPanel class="tab-panel">
+							<TasksList :tasks="tasksStore.tasks" />
+						</TabPanel>
+					</TabPanels>
+				</TabGroup>
+			</div>
+			<div class="md:col-span-2">
+				<h1 class="text-xl text-white font-semibold">Suggestion Tasks</h1>
+				<TasksListSuggestion :tasks="tasksStore.tasks" />
+			</div>
+		</div>
 	</div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useAuthStore } from '../store/auth'
-import axios from '../plugins/axios'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { useTasksStore } from '../store/tasks'
+import TasksList from '../components/TasksList.vue'
+import TasksListSuggestion from '../components/TasksListSuggestion.vue'
 
-const authStore = useAuthStore()
-const user = authStore.user
+import Tab from '../components/Tab.vue'
+import { TabGroup, TabList, TabPanels, TabPanel } from '@headlessui/vue'
 
-const logout = () => {
-	authStore.logout()
-}
+const tasksStore = useTasksStore()
+const dataTabList = ref([
+	{
+		name: 'Tasks',
+	},
+	{
+		name: 'Completed',
+	},
+])
 
-onMounted(async () => {
-	try {
-		const response = await axios.get('/data')
-		if (response) {
-			console.log('response', response.data)
-		}
-	} catch (error) {
-		console.log('error', error)
-	}
+onBeforeMount(() => {
+	tasksStore.isLoading = true
 })
+onMounted(async () => {
+	await tasksStore.fetchTasks()
+})
+
+// watch(tasks, newValue => {
+// 	console.log('newValue', newValue)
+// 	// data.value = newValue
+// })
 </script>
