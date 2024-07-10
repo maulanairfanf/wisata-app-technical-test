@@ -3,6 +3,7 @@ import Home from '../pages/Home.vue'
 import Signin from '../pages/Signin.vue'
 import authMiddleware from '../middleware/auth'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
+import AuthLayout from '../layouts/AuthLayout.vue'
 
 const routes = [
 	{
@@ -17,6 +18,12 @@ const routes = [
 					requiresAuth: true,
 				},
 			},
+		],
+	},
+	{
+		path: '',
+		component: AuthLayout,
+		children: [
 			{
 				path: 'signin',
 				name: 'SignIn',

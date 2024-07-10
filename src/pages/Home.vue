@@ -18,8 +18,8 @@
 				</TabGroup>
 			</div>
 			<div class="md:col-span-2">
-				<h1 class="text-xl text-white font-semibold">Suggestion Tasks</h1>
-				<TasksListSuggestion :tasks="tasksStore.tasks" />
+				<h1 class="text-xl text-white font-semibold py-4">Suggestion Tasks</h1>
+				<TasksListSuggestion :tasks="tasksStore.tasksSuggestion" />
 			</div>
 		</div>
 	</div>
@@ -49,10 +49,7 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
 	await tasksStore.fetchTasks()
+	await tasksStore.fetchTasksSuggestion()
+	tasksStore.isLoading = false
 })
-
-// watch(tasks, newValue => {
-// 	console.log('newValue', newValue)
-// 	// data.value = newValue
-// })
 </script>
