@@ -1,5 +1,3 @@
-<!-- src/layouts/DefaultLayout.vue -->
-
 <template>
 	<div class="h-screen bg-zinc-900">
 		<header></header>
