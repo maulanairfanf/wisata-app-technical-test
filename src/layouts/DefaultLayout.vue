@@ -4,7 +4,7 @@
 	<div class="bg-zinc-900" style="min-height: 100vh">
 		<header>
 			<div class="flex justify-end p-5">
-				<button @click="logout" class="btn" :disabled="isLoading">
+				<button @click="logout" class="btn-default" :disabled="isLoading">
 					{{ getTextButton }}
 				</button>
 			</div>

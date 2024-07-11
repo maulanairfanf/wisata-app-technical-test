@@ -28,7 +28,11 @@
 					class="field-text"
 				/>
 			</div>
-			<button type="submit" class="btn w-full mt-2" :disabled="isLoading">
+			<button
+				type="submit"
+				class="btn-default w-full mt-2"
+				:disabled="isLoading"
+			>
 				{{ getTextButton }}
 			</button>
 		</form>

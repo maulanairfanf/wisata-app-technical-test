@@ -67,9 +67,9 @@ async function handleChangeTab(payload) {
 	if (payload === 0) {
 		tasksStore.is_completed = ''
 	} else if (payload === 1) {
-		tasksStore.is_completed = 1
-	} else if (payload === 2) {
 		tasksStore.is_completed = 0
+	} else if (payload === 2) {
+		tasksStore.is_completed = 1
 	}
 }
 
