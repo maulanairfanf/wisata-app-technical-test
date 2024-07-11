@@ -3,12 +3,21 @@
 		<div class="grid md:grid-cols-12 gap-4 w-full">
 			<div class="md:col-span-8 lg:col-span-10 flex flex-col items-center">
 				<TabGroup @change="handleChangeTab">
-					<Tab :dataTabList="dataTabList" />
+					<div
+						class="w-full p-2 flex space-y-2 flex-wrap items-center justify-center md:justify-between"
+					>
+						<Search />
+						<Tab :dataTabList="dataTabList" />
+						<button class="btn btn-blue" @click="handleModal(true)">
+							<PlusCircleIcon class="-ml-0.5 h-5 w-5" aria-hidden="true" />
+							Add New Task
+						</button>
+					</div>
 					<div
 						v-if="tasksStore.isLoading"
 						class="h-full w-full flex items-center justify-center"
 					>
-						<Spinner size="h-24 w-24" class="mt-20" />
+						<Spinner config="h-24 w-24 fill-blue-500" class="mt-20" />
 					</div>
 					<TabPanels class="w-full" v-else>
 						<TabPanel class="tab-panel">
@@ -30,24 +39,30 @@
 					v-if="isLoadingSuggestion"
 					class="h-full w-full flex items-center justify-center"
 				>
-					<Spinner size="h-24 w-24" class="mt-20" />
+					<Spinner config="h-24 w-24 fill-blue-500" class="mt-20" />
 				</div>
 				<TasksListSuggestion v-else :tasks="tasksStore.tasksSuggestion" />
 			</div>
 		</div>
+		<Modal :showModal="showModal" @handle-modal="handleModal" />
 	</div>
 </template>
 
 <script setup>
 import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { TabGroup, TabList, TabPanels, TabPanel } from '@headlessui/vue'
+import { PlusCircleIcon } from '@heroicons/vue/20/solid'
+
 import { useTasksStore } from '../store/tasks'
+
+import Search from '../components/Search.vue'
 import TasksList from '../components/TasksList.vue'
 import TasksListSuggestion from '../components/TasksListSuggestion.vue'
 import Pagination from '../components/Pagination.vue'
 import Spinner from '../components/Spinner.vue'
 import Tab from '../components/Tab.vue'
-import { TabGroup, TabList, TabPanels, TabPanel } from '@headlessui/vue'
-const tasksStore = useTasksStore()
+import Modal from '../components/Modal.vue'
+
 const dataTabList = ref([
 	{
 		name: 'All Tasks',
@@ -59,7 +74,14 @@ const dataTabList = ref([
 		name: 'Completed Tasks',
 	},
 ])
+
+const tasksStore = useTasksStore()
 const isLoadingSuggestion = ref(false)
+const showModal = ref(false)
+
+function handleModal(show) {
+	showModal.value = show
+}
 
 async function handleChangeTab(payload) {
 	tasksStore.resetPagination()
@@ -77,7 +99,7 @@ watch(
 	() => tasksStore.is_completed,
 	async (oldValue, newValue) => {
 		if (oldValue !== newValue) {
-			await tasksStore.fetchTasks()
+			await tasksStore.fetchTasks('is_completed')
 		}
 	}
 )
@@ -88,7 +110,7 @@ onBeforeMount(() => {
 })
 
 onMounted(async () => {
-	await tasksStore.fetchTasks()
+	await tasksStore.fetchTasks('onMounted')
 	await tasksStore.fetchTasksSuggestion()
 	isLoadingSuggestion.value = false
 })

@@ -3,7 +3,6 @@
 		class="bg-white border rounded-md p-2 flex flex-col justify-between relative"
 	>
 		<h1 class="text-md">{{ item.name }}</h1>
-		<h2 class="text-md">{{ item.is_completed }}</h2>
 		<div class="flex justify-between mt-2" v-if="!suggestion">
 			<span :class="`badge capitalize text-md ${getColorBadge}`">{{
 				item.priority.name
@@ -32,7 +31,6 @@
 </template>
 <script setup>
 import { computed } from 'vue'
-
 import {
 	CheckCircleIcon,
 	XCircleIcon,
@@ -57,7 +55,9 @@ async function handleCompletedTasks(payload) {
 	await tasksStore.markTaskComplete(payload)
 }
 
-async function handleAddTasks() {}
+async function handleAddTasks() {
+	await tasksStore.addTask({ name: props.item.name })
+}
 
 const getTextButton = computed(() => {
 	const isCompleted = props.item.is_completed

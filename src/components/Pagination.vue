@@ -47,7 +47,6 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
 import { useTasksStore } from '../store/tasks'
 
@@ -55,19 +54,18 @@ const tasksStore = useTasksStore()
 const { pagination } = tasksStore
 function handleChangePagination(payload) {
 	pagination.current_page = payload
+	tasksStore.fetchTasks('pagination')
 }
 function handlePrev() {
 	if (pagination.current_page - 1 >= 1) {
 		pagination.current_page--
+		tasksStore.fetchTasks('pagination')
 	}
 }
 function handleNext() {
 	if (pagination.current_page + 1 <= pagination.last_page) {
 		pagination.current_page++
+		tasksStore.fetchTasks('pagination')
 	}
 }
-
-watch(pagination, async () => {
-	await tasksStore.fetchTasks()
-})
 </script>

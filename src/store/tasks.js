@@ -14,9 +14,11 @@ export const useTasksStore = defineStore('tasks', {
 		},
 		query: '',
 		is_completed: '',
+		priorities: [],
 	}),
 	actions: {
-		async fetchTasks() {
+		async fetchTasks(payload) {
+			console.log('modal', payload)
 			this.isLoading = true
 
 			const params = {
@@ -52,15 +54,32 @@ export const useTasksStore = defineStore('tasks', {
 
 		async markTaskComplete(taskId) {
 			try {
-				const response = await axios.patch(`/tasks/${taskId}/complete`)
-				console.log(`Task ${taskId} response`)
+				await axios.patch(`/tasks/${taskId}/complete`)
 				await this.fetchTasks()
-				return response
 			} catch (error) {
 				console.error(`Error marking task ${taskId} as complete:`, error)
 			}
 		},
 
+		async addTask(task) {
+			try {
+				await axios.post('/tasks', task)
+			} catch (error) {
+				console.error('Error adding task:', error)
+			}
+		},
+
+		async fetchPriority() {
+			try {
+				const response = await axios.get(`/priorities`)
+				if (response) {
+					this.priorities = response.data.data
+					console.log('this.priorities', this.priorities)
+				}
+			} catch (error) {
+				console.error(`Error marking task ${taskId} as complete:`, error)
+			}
+		},
 		resetPagination() {
 			this.pagination.current_page = 1
 			this.pagination.last_page = 1

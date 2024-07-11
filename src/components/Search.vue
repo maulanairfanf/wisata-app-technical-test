@@ -22,7 +22,7 @@ import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import { useTasksStore } from '../store/tasks'
 import { debounce } from 'lodash'
 const debouncedFetchTasks = debounce(async function () {
-	await tasksStore.fetchTasks()
+	await tasksStore.fetchTasks('debounce')
 }, 500)
 const tasksStore = useTasksStore()
 

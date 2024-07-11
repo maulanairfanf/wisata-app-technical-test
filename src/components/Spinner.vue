@@ -2,8 +2,8 @@
 	<div role="status">
 		<svg
 			aria-hidden="true"
-			class="text-gray-200 animate-spin dark:text-gray-600 fill-blue-500"
-			:class="size"
+			class="text-white animate-spin"
+			:class="config"
 			viewBox="0 0 100 101"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
@@ -17,14 +17,13 @@
 				fill="currentFill"
 			/>
 		</svg>
-		<span class="sr-only">Loading...</span>
 	</div>
 </template>
 <script setup>
 defineProps({
-	size: {
+	config: {
 		type: String,
-		default: 'w-8 h-8',
+		default: 'w-8 h-8 fill-blue-500',
 	},
 })
 </script>

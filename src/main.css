@@ -4,10 +4,10 @@
 
 @layer components {
 	.field-text {
-		@apply outline-none w-full px-4 py-2 rounded-lg border hover:border hover:border-white  border-gray-500 hover:shadow-md;
+		@apply outline-none w-full px-4 py-2 rounded-lg border hover:border hover:border-white  border-gray-300 hover:shadow-md;
 	}
 	.btn {
-		@apply inline-flex items-center gap-x-1.5 rounded-md  px-2.5 py-1.5 text-sm font-semibold  shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+		@apply inline-flex items-center gap-x-1.5 rounded-md  px-2.5 py-1.5 text-sm font-semibold  shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 outline-none;
 	}
 	.btn-default {
 		@apply px-4 py-2 border bg-white outline-none rounded-lg font-semibold hover:border hover:border-white border-gray-500;
@@ -40,7 +40,7 @@
 		@apply bg-gray-600  text-white  hover:bg-gray-500  focus-visible:outline-gray-600;
 	}
 	.btn-red {
-		@apply i bg-red-600  text-white  hover:bg-red-500  focus-visible:outline-red-600;
+		@apply bg-red-600  text-white  hover:bg-red-500  focus-visible:outline-red-600;
 	}
 	.pagination-active {
 		@apply bg-blue-600 relative inline-flex items-center px-4 py-2 text-sm font-semibold text-white  hover:bg-blue-500;
