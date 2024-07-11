@@ -1,5 +1,3 @@
-// src/stores/tasks.js
-
 import { defineStore } from 'pinia'
 import axios from '../plugins/axios'
 
@@ -8,19 +6,41 @@ export const useTasksStore = defineStore('tasks', {
 		tasks: [],
 		tasksSuggestion: [],
 		isLoading: false,
-		pagination: {},
+		pagination: {
+			per_page: 12,
+			current_page: 1,
+			last_page: 1,
+			total: 0,
+		},
 		query: '',
+		is_completed: '',
 	}),
 	actions: {
 		async fetchTasks() {
+			this.isLoading = true
+
+			const params = {
+				is_completed: this.is_completed,
+				search: this.query,
+				per_page: this.pagination.per_page,
+				page: this.pagination.current_page,
+			}
+
 			try {
-				const response = await axios.get('/tasks')
+				const response = await axios.get('/tasks', { params })
 				console.log('response', response.data)
 				this.tasks = response.data.data
-				this.pagination = response.data.pagination
+				console.log(
+					'response.data.pagination.last_page',
+					response.data.pagination.last_page
+				)
+				this.pagination.current_page = response.data.pagination.current_page
+				this.pagination.last_page = response.data.pagination.last_page
+				this.pagination.total = response.data.pagination.total
 			} catch (error) {
 				console.error('Error fetching tasks:', error)
 			}
+			this.isLoading = false
 		},
 
 		async fetchTasksSuggestion() {
@@ -31,6 +51,13 @@ export const useTasksStore = defineStore('tasks', {
 			} catch (error) {
 				console.error('Error fetching tasks:', error)
 			}
+		},
+
+		resetPagination() {
+			this.pagination.current_page = 1
+			this.pagination.last_page = 1
+			this.pagination.total = 0
+			this.pagination.per_page = 12
 		},
 	},
 })

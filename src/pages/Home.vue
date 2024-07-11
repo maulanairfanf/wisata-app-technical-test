@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-col items-center justify-center container mx-auto">
 		<div class="grid md:grid-cols-12 gap-4 w-full">
-			<div class="md:col-span-10 flex flex-col items-center">
+			<div class="md:col-span-8 lg:col-span-10 flex flex-col items-center">
 				<TabGroup @change="handleChangeTab">
 					<Tab :dataTabList="dataTabList" />
 					<div
@@ -22,8 +22,9 @@
 						</TabPanel>
 					</TabPanels>
 				</TabGroup>
+				<Pagination v-if="tasksStore.pagination.total !== 0" />
 			</div>
-			<div class="md:col-span-2 p-2">
+			<div class="md:col-span-4 lg:col-span-2 p-2">
 				<h1 class="text-xl text-white font-semibold py-4">Suggestion Tasks</h1>
 				<div
 					v-if="isLoadingSuggestion"
@@ -42,11 +43,10 @@ import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import { useTasksStore } from '../store/tasks'
 import TasksList from '../components/TasksList.vue'
 import TasksListSuggestion from '../components/TasksListSuggestion.vue'
+import Pagination from '../components/Pagination.vue'
 import Spinner from '../components/Spinner.vue'
-
 import Tab from '../components/Tab.vue'
 import { TabGroup, TabList, TabPanels, TabPanel } from '@headlessui/vue'
-
 const tasksStore = useTasksStore()
 const dataTabList = ref([
 	{
@@ -62,6 +62,8 @@ const dataTabList = ref([
 const isLoadingSuggestion = ref(false)
 
 async function handleChangeTab(payload) {
+	tasksStore.resetPagination()
+
 	if (payload === 0) {
 		tasksStore.is_completed = ''
 	} else if (payload === 1) {
