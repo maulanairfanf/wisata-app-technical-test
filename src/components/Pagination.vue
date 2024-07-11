@@ -15,7 +15,7 @@
 		<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
 			<div>
 				<nav
-					class="isolate inline-flex rounded-md shadow-sm"
+					class="isolate inline-flex rounded-md shadow-sm bg-blue-600/30"
 					aria-label="Pagination"
 				>
 					<div class="pagination-button rounded-l-md" @click="handlePrev()">
