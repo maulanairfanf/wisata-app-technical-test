@@ -30,10 +30,7 @@ export const useTasksStore = defineStore('tasks', {
 				const response = await axios.get('/tasks', { params })
 				console.log('response', response.data)
 				this.tasks = response.data.data
-				console.log(
-					'response.data.pagination.last_page',
-					response.data.pagination.last_page
-				)
+
 				this.pagination.current_page = response.data.pagination.current_page
 				this.pagination.last_page = response.data.pagination.last_page
 				this.pagination.total = response.data.pagination.total
@@ -50,6 +47,17 @@ export const useTasksStore = defineStore('tasks', {
 				this.tasksSuggestion = response.data.data
 			} catch (error) {
 				console.error('Error fetching tasks:', error)
+			}
+		},
+
+		async markTaskComplete(taskId) {
+			try {
+				const response = await axios.patch(`/tasks/${taskId}/complete`)
+				console.log(`Task ${taskId} response`)
+				await this.fetchTasks()
+				return response
+			} catch (error) {
+				console.error(`Error marking task ${taskId} as complete:`, error)
 			}
 		},
 
