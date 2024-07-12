@@ -59,7 +59,10 @@
 												>Priority</label
 											>
 											<div>
-												<InputSelect @handle-priority="handlePriority" />
+												<InputSelect
+													@handle-priority="handlePriority"
+													:selectedPriority="selectedPriority"
+												/>
 											</div>
 										</div>
 									</div>
@@ -94,7 +97,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import {
 	Dialog,
 	DialogPanel,
@@ -106,31 +109,63 @@ import InputSelect from './InputSelect.vue'
 import { useTasksStore } from '../store/tasks'
 import Spinner from './Spinner.vue'
 
-defineProps({
+const props = defineProps({
 	showModal: {
 		default: false,
 		type: Boolean,
 	},
+	mode: {
+		default: 'create',
+		type: String,
+	},
+	item: {
+		default: null,
+		type: Object,
+	},
 })
 
 const tasksStore = useTasksStore()
-const idPriority = ref(0)
+const selectedPriority = ref({})
 const name = ref('')
 const isLoading = ref(false)
 const emit = defineEmits(['handle-modal'])
 
 function handleModal(payload) {
 	emit('handle-modal', payload)
-	name.value = ''
+	if (props.mode === 'create') {
+		name.value = ''
+		selectedPriority.value = {}
+	} else {
+		name.value = props.item.name
+		selectedPriority.value = props.item.priority
+	}
 }
 
 function handlePriority(payload) {
-	idPriority.value = payload.id
+	selectedPriority.value = payload
 }
+
+onMounted(() => {
+	if (props.mode === 'update') {
+		name.value = props.item.name
+		selectedPriority.value = props.item.priority
+	}
+})
 
 async function handleSubmit() {
 	isLoading.value = true
-	await tasksStore.addTask({ name: name.value, id: idPriority.value })
+	if (props.mode === 'create') {
+		await tasksStore.addTask({
+			name: name.value,
+			priority_id: selectedPriority.value.id,
+		})
+	} else {
+		await tasksStore.updateTask({
+			id: props.item.id,
+			name: name.value,
+			priority_id: selectedPriority.value.id,
+		})
+	}
 	handleModal(false)
 	isLoading.value = false
 	await tasksStore.fetchTasks('modal')

@@ -69,6 +69,18 @@ export const useTasksStore = defineStore('tasks', {
 			}
 		},
 
+		async updateTask(payload) {
+			console.log('payload', payload)
+			try {
+				await axios.put(`/tasks/${payload.id}`, {
+					name: payload.name,
+					priority_id: payload.priority_id,
+				})
+			} catch (error) {
+				console.error('Error adding task:', error)
+			}
+		},
+
 		async fetchPriority() {
 			try {
 				const response = await axios.get(`/priorities`)
@@ -80,6 +92,7 @@ export const useTasksStore = defineStore('tasks', {
 				console.error(`Error marking task ${taskId} as complete:`, error)
 			}
 		},
+
 		resetPagination() {
 			this.pagination.current_page = 1
 			this.pagination.last_page = 1

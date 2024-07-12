@@ -1,6 +1,7 @@
 <template>
 	<div
-		class="bg-white border rounded-md p-2 flex flex-col justify-between relative"
+		class="cursor-pointer bg-gray-50 hover:bg-white rounded-md p-2 flex flex-col justify-between relative"
+		@click="handleModal(true)"
 	>
 		<h1 class="text-md">{{ item.name }}</h1>
 		<div class="flex justify-between mt-2" v-if="!suggestion">
@@ -22,21 +23,37 @@
 			</button>
 		</div>
 		<div class="flex justify-end mt-2" v-else="!suggestion">
-			<button type="button" class="btn btn-blue" @click="handleAddTasks()">
-				<PlusCircleIcon class="-ml-0.5 h-5 w-5" aria-hidden="true" />
-				Add To Tasks
+			<button
+				type="button"
+				class="btn btn-blue relative"
+				:disabled="isLoading"
+				@click="handleAddTasks()"
+			>
+				<span v-if="!isLoading" class="flex">
+					<PlusCircleIcon class="mr-2 h-5 w-5" aria-hidden="true" />
+					Add
+				</span>
+				<Spinner v-else config="w-5 h-5 fill-white" />
 			</button>
 		</div>
 	</div>
+	<Modal
+		:showModal="showModal"
+		:item="item"
+		@handle-modal="handleModal"
+		mode="update"
+	/>
 </template>
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import {
 	CheckCircleIcon,
 	XCircleIcon,
 	PlusCircleIcon,
 } from '@heroicons/vue/20/solid'
 import { useTasksStore } from '../store/tasks'
+import Modal from '../components/Modal.vue'
+import Spinner from '../components/Spinner.vue'
 
 const props = defineProps({
 	item: {
@@ -49,14 +66,25 @@ const props = defineProps({
 	},
 })
 
+const showModal = ref(false)
 const tasksStore = useTasksStore()
+const isLoading = ref(false)
+
+function handleModal(show) {
+	if (!props.suggestion) {
+		showModal.value = show
+	}
+}
 
 async function handleCompletedTasks(payload) {
 	await tasksStore.markTaskComplete(payload)
 }
 
 async function handleAddTasks() {
+	isLoading.value = true
 	await tasksStore.addTask({ name: props.item.name })
+	await tasksStore.fetchTasks('handhandleAddTasksle')
+	isLoading.value = false
 }
 
 const getTextButton = computed(() => {

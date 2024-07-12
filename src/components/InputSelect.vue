@@ -66,6 +66,13 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { useTasksStore } from '../store/tasks'
 
+const props = defineProps({
+	selectedPriority: {
+		type: Object,
+		default: () => {},
+	},
+})
+
 const tasksStore = useTasksStore()
 const isLoading = ref(true)
 
@@ -75,7 +82,13 @@ const emits = defineEmits(['handle-priority'])
 
 onMounted(async () => {
 	if (tasksStore.priorities.length === 0) await tasksStore.fetchPriority()
-	selectedPriority.value = tasksStore.priorities[0]
+	if (Object.keys(props.selectedPriority).length !== 0) {
+		console.log('masuk if', props.selectedPriority)
+		selectedPriority.value = props.selectedPriority
+	} else {
+		console.log('masuke else', tasksStore.priorities[0])
+		selectedPriority.value = tasksStore.priorities[0]
+	}
 	isLoading.value = false
 })
 
