@@ -69,6 +69,14 @@ export const useTasksStore = defineStore('tasks', {
 			}
 		},
 
+		async deleteTask(id) {
+			try {
+				await axios.delete('/tasks/' + id)
+			} catch (error) {
+				console.error('Error adding task:', error)
+			}
+		},
+
 		async updateTask(payload) {
 			console.log('payload', payload)
 			try {
