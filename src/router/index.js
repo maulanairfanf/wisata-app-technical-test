@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import Signin from '../pages/Signin.vue'
+import SignUp from '../pages/SignUp.vue'
 import authMiddleware from '../middleware/auth'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import AuthLayout from '../layouts/AuthLayout.vue'
@@ -28,6 +29,14 @@ const routes = [
 				path: 'signin',
 				name: 'SignIn',
 				component: Signin,
+				meta: {
+					requiresAuth: false,
+				},
+			},
+			{
+				path: 'signup',
+				name: 'SignUp',
+				component: SignUp,
 				meta: {
 					requiresAuth: false,
 				},

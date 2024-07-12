@@ -1,5 +1,3 @@
-// src/store/auth.js
-
 import { defineStore } from 'pinia'
 import axios from '../plugins/axios'
 import Cookies from 'js-cookie'
@@ -26,6 +24,24 @@ export const useAuthStore = defineStore('auth', {
 				throw error
 			}
 		},
+
+		async register(credentials) {
+			try {
+				const response = await axios.post('/register', credentials)
+				if (response) {
+					console.log('response', response.data.data.access_token)
+					this.token = response.data.data.access_token
+					Cookies.set('token', this.token, { expires: 7 })
+					axios.defaults.headers.common[
+						'Authorization'
+					] = `Bearer ${this.token}`
+					return response
+				}
+			} catch (error) {
+				throw error
+			}
+		},
+
 		async logout() {
 			try {
 				const response = await axios.post('/logout')
