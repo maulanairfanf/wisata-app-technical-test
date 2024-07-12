@@ -8,7 +8,7 @@
 			class="w-full max-w-xs flex flex-col justify-center"
 		>
 			<h1 class="text-white text-2xl font-semibold text-center mb-6">
-				Log in to make your todo
+				Sign In to make your todo
 			</h1>
 			<div class="mt-2">
 				<input
@@ -35,6 +35,15 @@
 			>
 				{{ getTextButton }}
 			</button>
+			<div class="text-white text-right mt-2 text-md">
+				Don't have an account?
+
+				<span
+					class="cursor-pointer hover:font-bold text-md"
+					@click="$router.push('/signup')"
+					>Sign up</span
+				>
+			</div>
 		</form>
 	</div>
 </template>
