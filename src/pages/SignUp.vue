@@ -80,13 +80,12 @@ const textError = ref('')
 
 const handleSubmit = async () => {
 	isLoading.value = true
-	console.log(email.value, password.value)
 	try {
 		const response = await authStore.register({
 			email: email.value,
 			name: name.value,
 			password: password.value,
-			password: password.value,
+			password_confirmation: confirmPassword.value,
 		})
 		if (response) router.push('/')
 	} catch (error) {
