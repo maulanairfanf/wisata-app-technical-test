@@ -42,6 +42,9 @@
 	.btn-red {
 		@apply bg-red-600  text-white  hover:bg-red-500  focus-visible:outline-red-600;
 	}
+	.btn-purple {
+		@apply bg-purple-600  text-white  hover:bg-purple-500  focus-visible:outline-purple-600;
+	}
 	.pagination-active {
 		@apply bg-blue-600 relative inline-flex items-center px-4 py-2 text-sm font-semibold text-white  hover:bg-blue-500;
 	}
@@ -50,5 +53,8 @@
 	}
 	.pagination-button {
 		@apply relative inline-flex items-center  px-2 py-2 text-white cursor-pointer  hover:bg-gray-50 focus:z-20 hover:text-blue-600;
+	}
+	.tooltip {
+		@apply z-10 absolute bottom-full mb-2 w-max px-2 py-1 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300;
 	}
 }

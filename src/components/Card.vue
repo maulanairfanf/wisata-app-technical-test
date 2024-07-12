@@ -1,26 +1,57 @@
 <template>
 	<div
 		class="cursor-pointer bg-gray-50 hover:bg-white rounded-md p-2 flex flex-col justify-between relative"
-		@click="handleModal(true)"
 	>
 		<h1 class="text-md">{{ item.name }}</h1>
-		<div class="flex justify-between mt-2" v-if="!suggestion">
+		<div class="flex flex-wrap justify-between mt-2" v-if="!suggestion">
 			<span :class="`badge capitalize text-md ${getColorBadge}`">{{
 				item.priority.name
 			}}</span>
-			<button
-				type="button"
-				:class="['btn hover:animate-bounce', getColorButton]"
-				@click="handleCompletedTasks(item.id)"
-			>
-				<XCircleIcon
-					v-if="item.is_completed"
-					class="-ml-0.5 h-5 w-5"
-					aria-hidden="true"
-				/>
-				<CheckCircleIcon v-else class="-ml-0.5 h-5 w-5" aria-hidden="true" />
-				{{ getTextButton }}
-			</button>
+			<div class="flex flex-nowrap justify-end mt-2 md:mt-0">
+				<div class="relative group">
+					<button
+						type="button"
+						:class="'btn mr-2 hover:animate-bounce btn-purple '"
+						@click="handleModal(true)"
+					>
+						<PencilIcon class="-ml-0.5 h-5 w-5" aria-hidden="true" />
+					</button>
+					<div class="tooltip">Edit Task</div>
+				</div>
+				<div class="relative group">
+					<button
+						type="button"
+						:class="'btn mr-2 hover:animate-bounce btn-red '"
+						@click="handleDeleteTasks(item.id)"
+						:disabled="isLoading"
+					>
+						<TrashIcon class="-ml-0.5 h-5 w-5" aria-hidden="true" />
+					</button>
+					<div class="tooltip">Delete Task</div>
+				</div>
+				<div class="relative group">
+					<button
+						type="button"
+						:class="['btn hover:animate-bounce ', getColorButton]"
+						@click="handleCompletedTasks(item.id)"
+						:disabled="isLoading"
+					>
+						<XCircleIcon
+							v-if="item.is_completed"
+							class="-ml-0.5 h-5 w-5"
+							aria-hidden="true"
+						/>
+						<CheckCircleIcon
+							v-else
+							class="-ml-0.5 h-5 w-5"
+							aria-hidden="true"
+						/>
+					</button>
+					<div class="tooltip">
+						{{ item.is_completed ? 'Mark as Incomplete' : 'Mark as Complete' }}
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="flex justify-end mt-2" v-else="!suggestion">
 			<button
@@ -50,6 +81,8 @@ import {
 	CheckCircleIcon,
 	XCircleIcon,
 	PlusCircleIcon,
+	TrashIcon,
+	PencilIcon,
 } from '@heroicons/vue/20/solid'
 import { useTasksStore } from '../store/tasks'
 import Modal from '../components/Modal.vue'
@@ -83,6 +116,13 @@ async function handleCompletedTasks(payload) {
 async function handleAddTasks() {
 	isLoading.value = true
 	await tasksStore.addTask({ name: props.item.name })
+	await tasksStore.fetchTasks('handhandleAddTasksle')
+	isLoading.value = false
+}
+
+async function handleDeleteTasks() {
+	isLoading.value = true
+	await tasksStore.deleteTask(props.item.id)
 	await tasksStore.fetchTasks('handhandleAddTasksle')
 	isLoading.value = false
 }
@@ -121,3 +161,9 @@ const getColorBadge = computed(() => {
 	}
 })
 </script>
+<style>
+#tooltip:hover .absolute {
+	opacity: 1;
+	visibility: visible;
+}
+</style>
