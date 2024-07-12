@@ -1,7 +1,7 @@
 <!-- src/pages/Signin.vue -->
 
 <template>
-	<div class="flex items-center justify-center border h-screen">
+	<div class="flex items-center justify-center h-screen">
 		<div class="alert-danger" v-if="textError">{{ textError }}</div>
 		<form
 			@submit.prevent="handleSubmit"
@@ -44,8 +44,8 @@ import { ref, computed } from 'vue'
 import { useAuthStore } from '../store/auth'
 import { useRouter } from 'vue-router'
 
-const email = ref('maul@gmail.com')
-const password = ref('password')
+const email = ref('')
+const password = ref('')
 const authStore = useAuthStore()
 const router = useRouter()
 const isLoading = ref(false)
