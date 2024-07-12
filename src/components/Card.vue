@@ -4,10 +4,10 @@
 	>
 		<h1 class="text-md">{{ item.name }}</h1>
 		<div class="flex flex-wrap justify-between mt-2" v-if="!suggestion">
-			<span :class="`badge capitalize text-md ${getColorBadge}`">{{
+			<span :class="`badge capitalize text-md  ${getColorBadge}`">{{
 				item.priority.name
 			}}</span>
-			<div class="flex flex-nowrap justify-end mt-2 md:mt-0">
+			<div class="flex flex-nowrap justify-end mt-2 lg:mt-0">
 				<div class="relative group">
 					<button
 						type="button"
@@ -116,26 +116,16 @@ async function handleCompletedTasks(payload) {
 async function handleAddTasks() {
 	isLoading.value = true
 	await tasksStore.addTask({ name: props.item.name })
-	await tasksStore.fetchTasks('handhandleAddTasksle')
+	await tasksStore.fetchTasks('handleAddTasks')
 	isLoading.value = false
 }
 
 async function handleDeleteTasks() {
 	isLoading.value = true
 	await tasksStore.deleteTask(props.item.id)
-	await tasksStore.fetchTasks('handhandleAddTasksle')
+	await tasksStore.fetchTasks('handleDeleteTasks')
 	isLoading.value = false
 }
-
-const getTextButton = computed(() => {
-	const isCompleted = props.item.is_completed
-
-	if (isCompleted) {
-		return 'Undo'
-	} else {
-		return 'Done'
-	}
-})
 
 const getColorButton = computed(() => {
 	const isCompleted = props.item.is_completed
