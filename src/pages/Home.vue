@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-col items-center justify-center container mx-auto">
 		<div class="grid md:grid-cols-12 gap-4 w-full">
-			<div class="md:col-span-8 lg:col-span-10 flex flex-col items-center">
+			<div class="md:col-span-9 lg:col-span-10 flex flex-col items-center">
 				<TabGroup @change="handleChangeTab">
 					<div
 						class="w-full p-2 flex space-y-2 flex-wrap items-center justify-center md:justify-between"
@@ -33,7 +33,7 @@
 				</TabGroup>
 				<Pagination v-if="tasksStore.pagination.total !== 0" />
 			</div>
-			<div class="md:col-span-4 lg:col-span-2 p-2">
+			<div class="md:col-span-3 lg:col-span-2 p-2">
 				<h1 class="text-xl text-white font-semibold py-4">Suggestion Tasks</h1>
 				<div
 					v-if="isLoadingSuggestion"
